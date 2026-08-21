@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lopes Perfumes Importados</title>
+<meta name="description" content="Perfumes importados selecionados. Catálogo com pedido direto pelo WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+  /* ============================================
+     CONFIGURAÇÃO — edite aqui o número de WhatsApp
+     Formato: código do país + DDD + número, sem espaços/símbolos
+     ============================================ */
+
+  :root{
+    --bg: #17130f;
+    --bg-elev: #221c16;
+    --bg-elev-2: #2b2419;
+    --line: #3a3125;
+    --ink: #f4ecdd;
+    --ink-muted: #b7a98f;
+    --ink-faint: #85795f;
+    --gold: #c7a05c;
+    --gold-soft: #8a7346;
+    --wine: #8a3a3a;
+    --whatsapp: #3f7a5b;
+    --whatsapp-hover: #4b8f69;
+
+    --serif: "Fraunces", Georgia, serif;
+    --sans: "Work Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+
+    --radius: 3px;
+    --container: 1180px;
+  }
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img{ max-width:100%; display:block; }
+
+  a{ color: inherit; }
+
+  button{ font-family: inherit; cursor: pointer; }
+
+  :focus-visible{
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
+
+  .wrap{
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* -------- seal / signature motif -------- */
+  .seal{
+    width: 34px; height: 34px;
+    border: 1px solid var(--gold-soft);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .seal::before{
+    content:"";
+    width: 22px; height: 22px;
+    border: 1px solid var(--gold-soft);
+    border-radius: 50%;
+    opacity: .6;
+  }
+  .seal-divider{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 14px;
+    color: var(--gold-soft);
+  }
+  .seal-divider::before,
+  .seal-divider::after{
+    content:"";
+    height:1px;
+    flex:1;
+    background: var(--line);
+  }
+
+  /* -------- header -------- */
+  header{
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(23,19,15,.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .header-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 18px 0;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    letter-spacing: .02em;
+  }
+  .brand small{
+    display:block;
+    font-family: var(--sans);
+    font-size: .62rem;
+    letter-spacing: .18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .header-actions{
+    display:flex;
+    align-items:center;
+    gap: 18px;
+  }
+  .cart-btn{
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 9px 16px;
+    border-radius: var(--radius);
+    font-size: .85rem;
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    transition: border-color .2s ease;
+  }
+  .cart-btn:hover{ border-color: var(--gold-soft); }
+  .cart-count{
+    background: var(--gold);
+    color: var(--bg);
+    font-weight: 700;
+    font-size: .72rem;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    padding: 0 4px;
+  }
+
+  /* -------- hero -------- */
+  .hero{
+    padding: 88px 0 76px;
+    text-align: center;
+    position: relative;
+  }
+  .eyebrow{
+    font-size: .72rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 22px;
+  }
+  .hero h1{
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(2.2rem, 5.5vw, 4rem);
+    line-height: 1.08;
+    max-width: 14ch;
+    margin: 0 auto 22px;
+  }
+  .hero h1 em{
+    font-style: italic;
+    font-weight: 400;
+    color: var(--gold);
+  }
+  .hero p{
+    color: var(--ink-muted);
+    max-width: 46ch;
+    margin: 0 auto 36px;
+    font-size: 1.02rem;
+  }
+  .hero-ctas{
+    display:flex;
+    gap: 14px;
+    justify-content:center;
+    flex-wrap: wrap;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap: 9px;
+    padding: 13px 26px;
+    border-radius: var(--radius);
+    font-size: .88rem;
+    font-weight: 600;
+    letter-spacing: .01em;
+    border: 1px solid transparent;
+    transition: transform .15s ease, opacity .15s ease, background .2s ease;
+  }
+  .btn:active{ transform: translateY(1px); }
+  .btn-primary{
+    background: var(--gold);
+    color: var(--bg);
+  }
+  .btn-primary:hover{ opacity: .88; }
+  .btn-ghost{
+    background: transparent;
+    border-color: var(--line);
+    color: var(--ink);
+  }
+  .btn-ghost:hover{ border-color: var(--gold-soft); }
+  .btn-whatsapp{
+    background: var(--whatsapp);
+    color: #fff;
+    width: 100%;
+    justify-content:center;
+    padding: 15px 20px;
+    font-size: .92rem;
+  }
+  .btn-whatsapp:hover{ background: var(--whatsapp-hover); }
+  .btn-whatsapp:disabled{
+    background: var(--bg-elev-2);
+    color: var(--ink-faint);
+    cursor: not-allowed;
+  }
+
+  /* -------- catálogo -------- */
+  .catalogo{ padding: 20px 0 100px; }
+  .catalogo-head{
+    display:flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  .catalogo-head h2{
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 1.9rem;
+  }
+  .busca{
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    color: var(--ink);
+    font-size: .88rem;
+    min-width: 220px;
+  }
+  .busca::placeholder{ color: var(--ink-faint); }
+
+  .grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 22px;
+  }
+
+  .card{
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display:flex;
+    flex-direction:column;
+    transition: border-color .2s ease, transform .2s ease;
+  }
+  .card:hover{
+    border-color: var(--gold-soft);
+    transform: translateY(-2px);
+  }
+  .card-image{
+    position: relative;
+    width: 100%;
+    height: 190px;
+    background: var(--bg-elev-2);
+    overflow: hidden;
+  }
+  .card-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: saturate(0.92) contrast(1.03);
+    transition: transform .4s ease;
+  }
+  .card:hover .card-image img{
+    transform: scale(1.04);
+  }
+  .card-image::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: linear-gradient(180deg, rgba(23,19,15,0) 55%, rgba(23,19,15,.55) 100%);
+    pointer-events:none;
+  }
+  .card-body{
+    padding: 20px 22px 22px;
+    display:flex;
+    flex-direction:column;
+    gap: 14px;
+    flex: 1;
+  }
+  .badge{
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    font-size: .66rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border-radius: 20px;
+    border: 1px solid var(--wine);
+    background: rgba(23,19,15,.75);
+    color: #e0a9a9;
+    white-space: nowrap;
+  }
+  .card-marca{
+    font-size: .68rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .card-nome{
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.25;
+  }
+  .card-desc{
+    color: var(--ink-muted);
+    font-size: .87rem;
+    flex: 1;
+  }
+  .card-bottom{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .card-preco{
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    color: var(--gold);
+  }
+  .card-preco small{
+    font-family: var(--sans);
+    font-size: .68rem;
+    color: var(--ink-faint);
+    margin-right: 3px;
+  }
+  .card-actions{
+    display:flex;
+    gap: 8px;
+  }
+  .icon-btn{
+    background: var(--bg-elev-2);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    width: 38px; height: 38px;
+    border-radius: var(--radius);
+    display:grid;
+    place-items:center;
+    font-size: 1rem;
+    transition: border-color .2s ease;
+  }
+  .icon-btn:hover{ border-color: var(--gold-soft); }
+
+  .vazio{
+    text-align:center;
+    padding: 60px 20px;
+    color: var(--ink-faint);
+    font-size: .95rem;
+  }
+
+  /* -------- carrinho flutuante -------- */
+  .cart-fab{
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 45;
+    background: var(--gold);
+    color: var(--bg);
+    border: none;
+    padding: 14px 20px;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: .85rem;
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.4);
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  .cart-fab:hover{ transform: translateY(-2px); }
+  .cart-fab[hidden]{ display:none; }
+
+  .overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    z-index: 50;
+    opacity: 0;
+    pointer-events:none;
+    transition: opacity .25s ease;
+  }
+  .overlay.aberto{ opacity: 1; pointer-events:auto; }
+
+  .drawer{
+    position: fixed;
+    top: 0; right: 0;
+    height: 100%;
+    width: min(420px, 100%);
+    background: var(--bg-elev);
+    border-left: 1px solid var(--line);
+    z-index: 51;
+    display:flex;
+    flex-direction:column;
+    transform: translateX(100%);
+    transition: transform .3s ease;
+  }
+  .drawer.aberto{ transform: translateX(0); }
+
+  .drawer-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--line);
+  }
+  .drawer-head h3{
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 1.25rem;
+  }
+  .drawer-close{
+    background:none;
+    border:none;
+    color: var(--ink-muted);
+    font-size: 1.4rem;
+    line-height: 1;
+    padding: 4px;
+  }
+  .drawer-close:hover{ color: var(--ink); }
+
+  .drawer-itens{
+    flex:1;
+    overflow-y:auto;
+    padding: 10px 24px;
+  }
+  .item-carrinho{
+    display:flex;
+    gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .item-carrinho:last-child{ border-bottom: none; }
+  .item-info{ flex:1; }
+  .item-nome{ font-size: .92rem; font-weight: 600; margin-bottom: 4px; }
+  .item-preco-unit{ font-size: .78rem; color: var(--ink-faint); }
+  .item-controles{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  .qtd-btn{
+    background: var(--bg-elev-2);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    width: 26px; height: 26px;
+    border-radius: var(--radius);
+    font-size: .9rem;
+    display:grid;
+    place-items:center;
+  }
+  .qtd-valor{ font-size: .88rem; min-width: 16px; text-align:center; }
+  .item-remover{
+    background:none;
+    border:none;
+    color: var(--ink-faint);
+    font-size: .78rem;
+    text-decoration: underline;
+    margin-left: auto;
+  }
+  .item-remover:hover{ color: var(--wine); }
+  .item-total{
+    font-family: var(--serif);
+    color: var(--gold);
+    font-size: 1rem;
+    white-space: nowrap;
+  }
+
+  .drawer-vazio{
+    padding: 60px 24px;
+    text-align:center;
+    color: var(--ink-faint);
+    font-size: .9rem;
+  }
+
+  .drawer-foot{
+    padding: 20px 24px 24px;
+    border-top: 1px solid var(--line);
+  }
+  .drawer-total{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom: 16px;
+    font-size: .95rem;
+  }
+  .drawer-total strong{
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    color: var(--gold);
+  }
+  .campo{
+    margin-bottom: 12px;
+  }
+  .campo label{
+    display:block;
+    font-size: .72rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 6px;
+  }
+  .campo input,
+  .campo textarea{
+    width: 100%;
+    background: var(--bg-elev-2);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 10px 12px;
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: .88rem;
+  }
+  .campo textarea{ resize: vertical; min-height: 60px; }
+  .campo input::placeholder,
+  .campo textarea::placeholder{ color: var(--ink-faint); }
+  .aviso-campo{
+    font-size: .74rem;
+    color: var(--wine);
+    margin-top: 6px;
+    display:none;
+  }
+
+  /* -------- footer -------- */
+  footer{
+    border-top: 1px solid var(--line);
+    padding: 44px 0 36px;
+  }
+  .footer-inner{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+  .footer-brand{
+    font-family: var(--serif);
+    font-size: 1.05rem;
+  }
+  .footer-sub{
+    color: var(--ink-faint);
+    font-size: .8rem;
+    margin-top: 4px;
+  }
+  .footer-contato{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    color: var(--ink-muted);
+    font-size: .88rem;
+  }
+
+  @media (max-width: 560px){
+    .wrap{ padding: 0 18px; }
+    .hero{ padding: 64px 0 52px; }
+    .catalogo-head{ align-items: stretch; }
+    .busca{ width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-inner">
+    <div class="brand">
+      <div class="seal"></div>
+      <div>
+        Lopes Perfumes
+        <small>Importados</small>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="cart-btn" id="btnAbrirCarrinho" aria-haspopup="dialog">
+        Carrinho <span class="cart-count" id="contadorCarrinho">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Perfumes importados · pedido direto no WhatsApp</p>
+    <h1>Fragrâncias selecionadas, <em>uma conversa</em> de distância</h1>
+    <p>Escolha os perfumes no catálogo abaixo e finalize o pedido diretamente pelo WhatsApp — sem cadastro, sem complicação.</p>
+    <div class="hero-ctas">
+      <a href="#catalogo" class="btn btn-primary">Ver catálogo</a>
+      <a href="#" id="linkWhatsappHero" class="btn btn-ghost" target="_blank" rel="noopener">Falar no WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap seal-divider" style="margin-bottom: 8px;">
+  <div class="seal" style="width:22px;height:22px;"></div>
+</div>
+
+<section class="catalogo" id="catalogo">
+  <div class="wrap">
+    <div class="catalogo-head">
+      <h2>Catálogo</h2>
+      <input type="search" class="busca" id="busca" placeholder="Buscar perfume ou marca…">
+    </div>
+    <div class="grid" id="grid"></div>
+    <p class="vazio" id="vazio" hidden>Nenhum perfume encontrado.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div>
+      <div class="footer-brand">Lopes Perfumes Importados</div>
+      <div class="footer-sub">Perfumes importados selecionados</div>
+    </div>
+    <a href="#" id="linkWhatsappFooter" class="footer-contato" target="_blank" rel="noopener">
+      💬 <span id="numeroExibicao">WhatsApp</span>
+    </a>
+  </div>
+</footer>
+
+<button class="cart-fab" id="cartFab" hidden>
+  🛍️ <span id="fabTexto">0 itens</span>
+</button>
+
+<div class="overlay" id="overlay"></div>
+
+<aside class="drawer" id="drawer" role="dialog" aria-label="Carrinho de compras">
+  <div class="drawer-head">
+    <h3>Seu carrinho</h3>
+    <button class="drawer-close" id="btnFecharCarrinho" aria-label="Fechar carrinho">×</button>
+  </div>
+
+  <div class="drawer-itens" id="drawerItens"></div>
+
+  <div class="drawer-foot" id="drawerFoot">
+    <div class="drawer-total">
+      <span>Total</span>
+      <strong id="drawerTotal">R$ 0,00</strong>
+    </div>
+
+    <div class="campo">
+      <label for="inputNome">Seu nome</label>
+      <input type="text" id="inputNome" placeholder="Nome completo" autocomplete="name">
+    </div>
+    <div class="campo">
+      <label for="inputEndereco">Endereço (opcional)</label>
+      <input type="text" id="inputEndereco" placeholder="Rua, bairro, cidade" autocomplete="street-address">
+    </div>
+    <div class="campo">
+      <label for="inputObs">Observações (opcional)</label>
+      <textarea id="inputObs" placeholder="Alguma observação sobre o pedido…"></textarea>
+    </div>
+    <p class="aviso-campo" id="avisoNome">Preencha seu nome para continuar.</p>
+
+    <button class="btn btn-whatsapp" id="btnFinalizar">Finalizar pedido no WhatsApp</button>
+  </div>
+</aside>
+
+<script>
+/* ============================================================
+   CONFIGURAÇÃO — ajuste aqui
+   ============================================================ */
+
+// Número de WhatsApp que vai receber os pedidos (código do país + DDD + número, só dígitos)
+const WHATSAPP_NUMERO = "5582998380780";
+
+// Texto exibido no rodapé/link de WhatsApp (formato livre, só para leitura)
+const WHATSAPP_EXIBICAO = "(82) 99838-0780";
+
+/* ============================================================
+   CATÁLOGO DE PRODUTOS
+   Para adicionar/editar/remover um perfume, edite a lista abaixo.
+   Cada item precisa de: id (único), nome, marca, preco, descricao,
+   estoque (número) e emoji (ícone simples do card).
+   ============================================================ */
+
+// As imagens abaixo são fotos de banco gratuito (Pixabay, licença livre para uso
+// comercial) usadas como PLACEHOLDER. Troque o campo "imagem" pela foto real de
+// cada perfume assim que tiver — pode ser uma foto tirada de celular mesmo, ou
+// um link de imagem já hospedada. Veja o README para mais detalhes.
+const PRODUTOS = [
+  { id: 1, nome: "Eau de Parfum Paris", marca: "Importado", preco: 150.00, descricao: "Perfume sofisticado e elegante, com notas florais e amadeiradas.", estoque: 10, imagem: "https://cdn.pixabay.com/photo/2016/06/03/15/45/perfume-1433654_1280.jpg" },
+  { id: 2, nome: "Perfume Milano", marca: "Importado", preco: 120.00, descricao: "Aroma masculino clássico, marcante e envolvente.", estoque: 15, imagem: "https://cdn.pixabay.com/photo/2023/04/30/11/53/cologne-7960372_1280.jpg" },
+  { id: 3, nome: "Fragância Versailles", marca: "Importado", preco: 180.00, descricao: "Perfume floral e delicado, ideal para o dia a dia.", estoque: 8, imagem: "https://cdn.pixabay.com/photo/2018/05/13/18/06/scent-of-roses-3397281_1280.jpg" },
+  { id: 4, nome: "Essência Toscana", marca: "Importado", preco: 165.00, descricao: "Notas cítricas e amadeiradas, fresco e sofisticado.", estoque: 3, imagem: "https://cdn.pixabay.com/photo/2016/07/07/17/12/fragrance-1502807_1280.jpg" },
+  { id: 5, nome: "Nuit d'Or", marca: "Importado", preco: 210.00, descricao: "Fragrância intensa e envolvente para ocasiões especiais.", estoque: 6, imagem: "https://cdn.pixabay.com/photo/2019/04/23/06/10/perfume-4148638_1280.jpg" },
+  { id: 6, nome: "Brisa Marina", marca: "Importado", preco: 135.00, descricao: "Aroma leve e aquático, perfeito para o verão.", estoque: 12, imagem: "https://cdn.pixabay.com/photo/2023/01/14/11/01/perfume-7717936_1280.jpg" },
+];
+
+/* ============================================================
+   A partir daqui é lógica do site — não precisa editar
+   ============================================================ */
+
+function formatarPreco(valor){
+  return valor.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function linkWhatsapp(numero, texto){
+  return `https://wa.me/${numero}${texto ? "?text=" + encodeURIComponent(texto) : ""}`;
+}
+
+// Preenche links fixos de WhatsApp (hero, rodapé)
+document.getElementById("linkWhatsappHero").href = linkWhatsapp(WHATSAPP_NUMERO, "Olá! Vim pelo site e gostaria de saber mais sobre os perfumes.");
+document.getElementById("linkWhatsappFooter").href = linkWhatsapp(WHATSAPP_NUMERO, "Olá! Vim pelo site da Lopes Perfumes.");
+document.getElementById("numeroExibicao").textContent = WHATSAPP_EXIBICAO;
+
+// -------- Carrinho (localStorage) --------
+let carrinho = JSON.parse(localStorage.getItem("lopes_carrinho") || "[]");
+
+function salvarCarrinho(){
+  localStorage.setItem("lopes_carrinho", JSON.stringify(carrinho));
+}
+
+function adicionarAoCarrinho(id){
+  const produto = PRODUTOS.find(p => p.id === id);
+  if (!produto) return;
+  const item = carrinho.find(i => i.id === id);
+  if (item){
+    item.quantidade += 1;
+  } else {
+    carrinho.push({ id: produto.id, nome: produto.nome, preco: produto.preco, quantidade: 1 });
+  }
+  salvarCarrinho();
+  renderizarTudo();
+}
+
+function alterarQuantidade(id, delta){
+  const item = carrinho.find(i => i.id === id);
+  if (!item) return;
+  item.quantidade += delta;
+  if (item.quantidade <= 0){
+    carrinho = carrinho.filter(i => i.id !== id);
+  }
+  salvarCarrinho();
+  renderizarTudo();
+}
+
+function removerItem(id){
+  carrinho = carrinho.filter(i => i.id !== id);
+  salvarCarrinho();
+  renderizarTudo();
+}
+
+function totalCarrinho(){
+  return carrinho.reduce((soma, item) => soma + item.preco * item.quantidade, 0);
+}
+
+function totalItens(){
+  return carrinho.reduce((soma, item) => soma + item.quantidade, 0);
+}
+
+// -------- Render catálogo --------
+const grid = document.getElementById("grid");
+const vazio = document.getElementById("vazio");
+const busca = document.getElementById("busca");
+
+function renderizarCatalogo(){
+  const termo = busca.value.trim().toLowerCase();
+  const lista = PRODUTOS.filter(p =>
+    p.nome.toLowerCase().includes(termo) || p.marca.toLowerCase().includes(termo)
+  );
+
+  grid.innerHTML = "";
+  vazio.hidden = lista.length > 0;
+
+  lista.forEach(produto => {
+    const estoqueBaixo = produto.estoque > 0 && produto.estoque <= 5;
+    const semEstoque = produto.estoque === 0;
+
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="card-image">
+        <img src="${produto.imagem}" alt="${produto.nome}" loading="lazy">
+        ${semEstoque ? '<span class="badge">Esgotado</span>' : estoqueBaixo ? '<span class="badge">Últimas unidades</span>' : ""}
+      </div>
+      <div class="card-body">
+        <div>
+          <div class="card-marca">${produto.marca}</div>
+          <div class="card-nome">${produto.nome}</div>
+        </div>
+        <p class="card-desc">${produto.descricao}</p>
+        <div class="card-bottom">
+          <div class="card-preco"><small>R$</small>${formatarPreco(produto.preco)}</div>
+          <div class="card-actions">
+            <button class="icon-btn" title="Perguntar no WhatsApp" data-whatsapp="${produto.id}">💬</button>
+            <button class="icon-btn" title="Adicionar ao carrinho" data-add="${produto.id}" ${semEstoque ? "disabled" : ""}>＋</button>
+          </div>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  grid.querySelectorAll("[data-add]").forEach(btn => {
+    btn.addEventListener("click", () => adicionarAoCarrinho(Number(btn.dataset.add)));
+  });
+  grid.querySelectorAll("[data-whatsapp]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const produto = PRODUTOS.find(p => p.id === Number(btn.dataset.whatsapp));
+      const texto = `Olá! Tenho interesse no perfume *${produto.nome}* (R$ ${formatarPreco(produto.preco)}). Pode me passar mais detalhes?`;
+      window.open(linkWhatsapp(WHATSAPP_NUMERO, texto), "_blank");
+    });
+  });
+}
+
+busca.addEventListener("input", renderizarCatalogo);
+
+// -------- Render carrinho / drawer --------
+const drawer = document.getElementById("drawer");
+const overlay = document.getElementById("overlay");
+const drawerItens = document.getElementById("drawerItens");
+const drawerFoot = document.getElementById("drawerFoot");
+const drawerTotal = document.getElementById("drawerTotal");
+const contadorCarrinho = document.getElementById("contadorCarrinho");
+const cartFab = document.getElementById("cartFab");
+const fabTexto = document.getElementById("fabTexto");
+const btnFinalizar = document.getElementById("btnFinalizar");
+const avisoNome = document.getElementById("avisoNome");
+
+function renderizarCarrinho(){
+  contadorCarrinho.textContent = totalItens();
+
+  if (totalItens() === 0){
+    cartFab.hidden = true;
+  } else {
+    cartFab.hidden = false;
+    fabTexto.textContent = `${totalItens()} ${totalItens() === 1 ? "item" : "itens"} · R$ ${formatarPreco(totalCarrinho())}`;
+  }
+
+  if (carrinho.length === 0){
+    drawerItens.innerHTML = `<div class="drawer-vazio">Seu carrinho está vazio.<br>Adicione perfumes do catálogo.</div>`;
+    drawerFoot.style.display = "none";
+    return;
+  }
+
+  drawerFoot.style.display = "block";
+  drawerTotal.textContent = `R$ ${formatarPreco(totalCarrinho())}`;
+
+  drawerItens.innerHTML = carrinho.map(item => `
+    <div class="item-carrinho">
+      <div class="item-info">
+        <div class="item-nome">${item.nome}</div>
+        <div class="item-preco-unit">R$ ${formatarPreco(item.preco)} / un</div>
+        <div class="item-controles">
+          <button class="qtd-btn" data-menos="${item.id}">−</button>
+          <span class="qtd-valor">${item.quantidade}</span>
+          <button class="qtd-btn" data-mais="${item.id}">+</button>
+          <button class="item-remover" data-remover="${item.id}">remover</button>
+        </div>
+      </div>
+      <div class="item-total">R$ ${formatarPreco(item.preco * item.quantidade)}</div>
+    </div>
+  `).join("");
+
+  drawerItens.querySelectorAll("[data-mais]").forEach(b => b.addEventListener("click", () => alterarQuantidade(Number(b.dataset.mais), 1)));
+  drawerItens.querySelectorAll("[data-menos]").forEach(b => b.addEventListener("click", () => alterarQuantidade(Number(b.dataset.menos), -1)));
+  drawerItens.querySelectorAll("[data-remover]").forEach(b => b.addEventListener("click", () => removerItem(Number(b.dataset.remover))));
+}
+
+function renderizarTudo(){
+  renderizarCatalogo();
+  renderizarCarrinho();
+}
+
+function abrirCarrinho(){
+  drawer.classList.add("aberto");
+  overlay.classList.add("aberto");
+}
+function fecharCarrinho(){
+  drawer.classList.remove("aberto");
+  overlay.classList.remove("aberto");
+}
+
+document.getElementById("btnAbrirCarrinho").addEventListener("click", abrirCarrinho);
+document.getElementById("cartFab").addEventListener("click", abrirCarrinho);
+document.getElementById("btnFecharCarrinho").addEventListener("click", fecharCarrinho);
+overlay.addEventListener("click", fecharCarrinho);
+
+// -------- Finalizar pedido via WhatsApp --------
+btnFinalizar.addEventListener("click", () => {
+  const nome = document.getElementById("inputNome").value.trim();
+  const endereco = document.getElementById("inputEndereco").value.trim();
+  const obs = document.getElementById("inputObs").value.trim();
+
+  if (!nome){
+    avisoNome.style.display = "block";
+    document.getElementById("inputNome").focus();
+    return;
+  }
+  avisoNome.style.display = "none";
+
+  let mensagem = `Olá! Meu nome é *${nome}* e gostaria de fazer o seguinte pedido:\n\n`;
+  carrinho.forEach(item => {
+    mensagem += `• ${item.nome} (x${item.quantidade}) — R$ ${formatarPreco(item.preco * item.quantidade)}\n`;
+  });
+  mensagem += `\n*Total: R$ ${formatarPreco(totalCarrinho())}*\n`;
+  if (endereco) mensagem += `\nEndereço: ${endereco}`;
+  if (obs) mensagem += `\nObservações: ${obs}`;
+
+  window.open(linkWhatsapp(WHATSAPP_NUMERO, mensagem), "_blank");
+});
+
+// -------- Inicialização --------
+renderizarTudo();
+</script>
+
+</body>
+</html>
