@@ -281,6 +281,7 @@
     overflow: hidden;
     display:flex;
     flex-direction:column;
+    cursor: pointer;
     transition: border-color .2s ease, transform .2s ease;
   }
   .card:hover{
@@ -318,6 +319,18 @@
     flex-direction:column;
     gap: 14px;
     flex: 1;
+  }
+  .badge-fotos{
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    z-index: 2;
+    font-size: .68rem;
+    padding: 4px 9px;
+    border-radius: 20px;
+    background: rgba(23,19,15,.75);
+    border: 1px solid var(--line);
+    color: var(--ink-muted);
   }
   .badge{
     position: absolute;
@@ -566,6 +579,160 @@
     display:none;
   }
 
+  /* -------- modal de detalhes do produto -------- */
+  .modal-overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.65);
+    z-index: 60;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .modal-overlay.aberto{
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal{
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    max-width: 880px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    position: relative;
+    transform: translateY(16px);
+    transition: transform .25s ease;
+  }
+  .modal-overlay.aberto .modal{
+    transform: translateY(0);
+  }
+  .modal-close{
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 5;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: rgba(23,19,15,.75);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font-size: 1.2rem;
+    display: grid;
+    place-items: center;
+  }
+  .modal-close:hover{ border-color: var(--gold-soft); }
+
+  .modal-galeria{
+    position: relative;
+    background: var(--bg-elev-2);
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .modal-galeria img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .modal-galeria-nav{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(23,19,15,.7);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font-size: 1.1rem;
+    display: grid;
+    place-items: center;
+  }
+  .modal-galeria-nav:hover{ border-color: var(--gold-soft); }
+  .modal-galeria-nav.prev{ left: 12px; }
+  .modal-galeria-nav.next{ right: 12px; }
+
+  .modal-galeria-dots{
+    position: absolute;
+    bottom: 14px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+  }
+  .modal-galeria-dots button{
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: rgba(244,236,221,.35);
+    border: none;
+    padding: 0;
+  }
+  .modal-galeria-dots button.ativo{
+    background: var(--gold);
+  }
+
+  .modal-info{
+    padding: 34px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .modal-marca{
+    font-size: .7rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .modal-nome{
+    font-family: var(--serif);
+    font-size: 1.7rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  .modal-preco{
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    color: var(--gold);
+  }
+  .modal-preco small{
+    font-family: var(--sans);
+    font-size: .72rem;
+    color: var(--ink-faint);
+    margin-right: 4px;
+  }
+  .modal-desc{
+    color: var(--ink-muted);
+    font-size: .93rem;
+    line-height: 1.6;
+  }
+  .modal-status{
+    font-size: .78rem;
+    color: var(--ink-faint);
+  }
+  .modal-actions{
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 6px;
+  }
+  .modal-actions .btn{ flex: 1; justify-content: center; }
+
+  @media (max-width: 680px){
+    .modal{ grid-template-columns: 1fr; }
+    .modal-galeria{ min-height: 240px; }
+  }
+
   /* -------- footer -------- */
   footer{
     border-top: 1px solid var(--line);
@@ -699,6 +866,18 @@
   </div>
 </aside>
 
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-label="Detalhes do perfume">
+  <div class="modal">
+    <button class="modal-close" id="modalClose" aria-label="Fechar">×</button>
+    <div class="modal-galeria" id="modalGaleria">
+      <!-- preenchido via JS -->
+    </div>
+    <div class="modal-info" id="modalInfo">
+      <!-- preenchido via JS -->
+    </div>
+  </div>
+</div>
+
 <script>
 /* ============================================================
    CONFIGURAÇÃO — ajuste aqui
@@ -718,17 +897,17 @@ const WHATSAPP_EXIBICAO = "(82) 99838-0780";
    motivo, o site usa o catálogo de exemplo abaixo como reserva.
    ============================================================ */
 
-const GOOGLE_SHEETS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSArL4TTqBbnlgrc-qBW-njLoLG5SaHen6dLYfYzN9HuKwQ-07FMGIsa5BT7mw7ZMuGpHSqspqybPpi/pub?output=csv";
+const GOOGLE_SHEETS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSArL4TTqBbnlgrc-qBW-njLoLG5SaHen6dLYfYzN9HuKwQ-07FMGIsa5BT7mw7ZMuGpHSqspqybPpi/pubhtml";
 
 // Catálogo de exemplo — usado como reserva caso a planilha não esteja
 // configurada ainda, ou caso ela falhe ao carregar (ex: sem internet).
 const PRODUTOS_PADRAO = [
-  { id: 1, nome: "Eau de Parfum Paris", marca: "Importado", preco: 150.00, descricao: "Perfume sofisticado e elegante, com notas florais e amadeiradas.", estoque: 10, imagem: "https://cdn.pixabay.com/photo/2016/06/03/15/45/perfume-1433654_1280.jpg" },
-  { id: 2, nome: "Perfume Milano", marca: "Importado", preco: 120.00, descricao: "Aroma masculino clássico, marcante e envolvente.", estoque: 15, imagem: "https://cdn.pixabay.com/photo/2023/04/30/11/53/cologne-7960372_1280.jpg" },
-  { id: 3, nome: "Fragância Versailles", marca: "Importado", preco: 180.00, descricao: "Perfume floral e delicado, ideal para o dia a dia.", estoque: 8, imagem: "https://cdn.pixabay.com/photo/2018/05/13/18/06/scent-of-roses-3397281_1280.jpg" },
-  { id: 4, nome: "Essência Toscana", marca: "Importado", preco: 165.00, descricao: "Notas cítricas e amadeiradas, fresco e sofisticado.", estoque: 3, imagem: "https://cdn.pixabay.com/photo/2016/07/07/17/12/fragrance-1502807_1280.jpg" },
-  { id: 5, nome: "Nuit d'Or", marca: "Importado", preco: 210.00, descricao: "Fragrância intensa e envolvente para ocasiões especiais.", estoque: 6, imagem: "https://cdn.pixabay.com/photo/2019/04/23/06/10/perfume-4148638_1280.jpg" },
-  { id: 6, nome: "Brisa Marina", marca: "Importado", preco: 135.00, descricao: "Aroma leve e aquático, perfeito para o verão.", estoque: 12, imagem: "https://cdn.pixabay.com/photo/2023/01/14/11/01/perfume-7717936_1280.jpg" },
+  { id: 1, nome: "Eau de Parfum Paris", marca: "Importado", preco: 150.00, descricao: "Perfume sofisticado e elegante, com notas florais e amadeiradas.", estoque: 10, imagens: ["https://cdn.pixabay.com/photo/2016/06/03/15/45/perfume-1433654_1280.jpg"] },
+  { id: 2, nome: "Perfume Milano", marca: "Importado", preco: 120.00, descricao: "Aroma masculino clássico, marcante e envolvente.", estoque: 15, imagens: ["https://cdn.pixabay.com/photo/2023/04/30/11/53/cologne-7960372_1280.jpg"] },
+  { id: 3, nome: "Fragância Versailles", marca: "Importado", preco: 180.00, descricao: "Perfume floral e delicado, ideal para o dia a dia.", estoque: 8, imagens: ["https://cdn.pixabay.com/photo/2018/05/13/18/06/scent-of-roses-3397281_1280.jpg"] },
+  { id: 4, nome: "Essência Toscana", marca: "Importado", preco: 165.00, descricao: "Notas cítricas e amadeiradas, fresco e sofisticado.", estoque: 3, imagens: ["https://cdn.pixabay.com/photo/2016/07/07/17/12/fragrance-1502807_1280.jpg"] },
+  { id: 5, nome: "Nuit d'Or", marca: "Importado", preco: 210.00, descricao: "Fragrância intensa e envolvente para ocasiões especiais.", estoque: 6, imagens: ["https://cdn.pixabay.com/photo/2019/04/23/06/10/perfume-4148638_1280.jpg"] },
+  { id: 6, nome: "Brisa Marina", marca: "Importado", preco: 135.00, descricao: "Aroma leve e aquático, perfeito para o verão.", estoque: 12, imagens: ["https://cdn.pixabay.com/photo/2023/01/14/11/01/perfume-7717936_1280.jpg"] },
 ];
 
 let PRODUTOS = PRODUTOS_PADRAO;
@@ -750,15 +929,26 @@ async function carregarProdutos(){
 
     const produtosDaPlanilha = resultado.data
       .filter(linha => linha.nome && linha.nome.trim())
-      .map(linha => ({
-        id: Number(linha.id),
-        nome: linha.nome.trim(),
-        marca: (linha.marca || "").trim(),
-        preco: parseFloat(String(linha.preco).replace(",", ".")) || 0,
-        descricao: (linha.descricao || "").trim(),
-        estoque: parseInt(linha.estoque, 10) || 0,
-        imagem: (linha.imagem || "").trim(),
-      }));
+      .map(linha => {
+        // Aceita a coluna nova "imagens" (vários links separados por |)
+        // ou a coluna antiga "imagem" (um link só), para não quebrar
+        // planilhas já configuradas antes dessa mudança.
+        const colunaImagens = linha.imagens || linha.imagem || "";
+        const imagens = colunaImagens
+          .split("|")
+          .map(s => resolverUrlImagem(s))
+          .filter(Boolean);
+
+        return {
+          id: Number(linha.id),
+          nome: linha.nome.trim(),
+          marca: (linha.marca || "").trim(),
+          preco: parseFloat(String(linha.preco).replace(",", ".")) || 0,
+          descricao: (linha.descricao || "").trim(),
+          estoque: parseInt(linha.estoque, 10) || 0,
+          imagens: imagens,
+        };
+      });
 
     if (produtosDaPlanilha.length > 0){
       PRODUTOS = produtosDaPlanilha;
@@ -776,6 +966,35 @@ async function carregarProdutos(){
 
 function formatarPreco(valor){
   return valor.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+// SVG usado quando uma imagem não carrega (link quebrado, Drive privado, etc.)
+const IMAGEM_FALLBACK = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+    <rect width="300" height="300" fill="#221c16"/>
+    <g fill="none" stroke="#5a4d38" stroke-width="2">
+      <path d="M130 90 h40 v20 h10 a10 10 0 0 1 10 10 v100 a10 10 0 0 1 -10 10 h-70 a10 10 0 0 1 -10 -10 v-100 a10 10 0 0 1 10 -10 h10 z"/>
+      <path d="M140 90 v-20 h20 v20"/>
+    </g>
+  </svg>
+`);
+
+// Converte links de compartilhamento do Google Drive (que não funcionam como
+// imagem direta) para um formato que o navegador consegue exibir. Links de
+// outros lugares (Pixabay, links diretos, etc.) passam sem alteração.
+function resolverUrlImagem(url){
+  if (!url) return "";
+  url = url.trim();
+
+  const driveMatchD = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+  const driveMatchId = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  const driveId = driveMatchD ? driveMatchD[1] : (url.includes("drive.google.com") && driveMatchId ? driveMatchId[1] : null);
+
+  if (driveId){
+    return `https://drive.google.com/thumbnail?id=${driveId}&sz=w1000`;
+  }
+
+  return url;
 }
 
 function linkWhatsapp(numero, texto){
@@ -850,11 +1069,15 @@ function renderizarCatalogo(){
     const estoqueBaixo = produto.estoque > 0 && produto.estoque <= 5;
     const semEstoque = produto.estoque === 0;
 
+    const capa = produto.imagens && produto.imagens[0] ? produto.imagens[0] : IMAGEM_FALLBACK;
+
     const card = document.createElement("div");
     card.className = "card";
+    card.dataset.abrirProduto = produto.id;
     card.innerHTML = `
       <div class="card-image">
-        <img src="${produto.imagem}" alt="${produto.nome}" loading="lazy">
+        <img src="${capa}" alt="${produto.nome}" loading="lazy" onerror="this.onerror=null;this.src='${IMAGEM_FALLBACK}';">
+        ${produto.imagens && produto.imagens.length > 1 ? `<span class="badge-fotos">📷 ${produto.imagens.length}</span>` : ""}
         ${semEstoque ? '<span class="badge">Esgotado</span>' : estoqueBaixo ? '<span class="badge">Últimas unidades</span>' : ""}
       </div>
       <div class="card-body">
@@ -875,11 +1098,18 @@ function renderizarCatalogo(){
     grid.appendChild(card);
   });
 
+  grid.querySelectorAll(".card").forEach(card => {
+    card.addEventListener("click", () => abrirModalProduto(Number(card.dataset.abrirProduto)));
+  });
   grid.querySelectorAll("[data-add]").forEach(btn => {
-    btn.addEventListener("click", () => adicionarAoCarrinho(Number(btn.dataset.add)));
+    btn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      adicionarAoCarrinho(Number(btn.dataset.add));
+    });
   });
   grid.querySelectorAll("[data-whatsapp]").forEach(btn => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
       const produto = PRODUTOS.find(p => p.id === Number(btn.dataset.whatsapp));
       const texto = `Olá! Tenho interesse no perfume *${produto.nome}* (R$ ${formatarPreco(produto.preco)}). Pode me passar mais detalhes?`;
       window.open(linkWhatsapp(WHATSAPP_NUMERO, texto), "_blank");
@@ -888,6 +1118,102 @@ function renderizarCatalogo(){
 }
 
 busca.addEventListener("input", renderizarCatalogo);
+
+// -------- Modal de detalhes do produto --------
+const modalOverlay = document.getElementById("modalOverlay");
+const modalGaleria = document.getElementById("modalGaleria");
+const modalInfo = document.getElementById("modalInfo");
+const modalClose = document.getElementById("modalClose");
+
+let indiceGaleriaAtual = 0;
+let produtoModalAtual = null;
+
+function abrirModalProduto(id){
+  const produto = PRODUTOS.find(p => p.id === id);
+  if (!produto) return;
+
+  produtoModalAtual = produto;
+  indiceGaleriaAtual = 0;
+  renderizarModal();
+
+  modalOverlay.classList.add("aberto");
+  document.body.style.overflow = "hidden";
+}
+
+function fecharModalProduto(){
+  modalOverlay.classList.remove("aberto");
+  document.body.style.overflow = "";
+}
+
+function renderizarModal(){
+  const produto = produtoModalAtual;
+  if (!produto) return;
+
+  const imagens = (produto.imagens && produto.imagens.length > 0) ? produto.imagens : [IMAGEM_FALLBACK];
+  const semEstoque = produto.estoque === 0;
+  const estoqueBaixo = produto.estoque > 0 && produto.estoque <= 5;
+
+  modalGaleria.innerHTML = `
+    <img src="${imagens[indiceGaleriaAtual]}" alt="${produto.nome}" onerror="this.onerror=null;this.src='${IMAGEM_FALLBACK}';">
+    ${imagens.length > 1 ? `
+      <button class="modal-galeria-nav prev" id="modalPrev" aria-label="Foto anterior">‹</button>
+      <button class="modal-galeria-nav next" id="modalNext" aria-label="Próxima foto">›</button>
+      <div class="modal-galeria-dots">
+        ${imagens.map((_, i) => `<button class="${i === indiceGaleriaAtual ? "ativo" : ""}" data-dot="${i}" aria-label="Foto ${i + 1}"></button>`).join("")}
+      </div>
+    ` : ""}
+  `;
+
+  modalInfo.innerHTML = `
+    <div>
+      <div class="modal-marca">${produto.marca}</div>
+      <div class="modal-nome">${produto.nome}</div>
+    </div>
+    <div class="modal-preco"><small>R$</small>${formatarPreco(produto.preco)}</div>
+    <p class="modal-desc">${produto.descricao}</p>
+    <p class="modal-status">${semEstoque ? "Produto esgotado no momento." : estoqueBaixo ? `Últimas unidades (restam ${produto.estoque}).` : "Disponível em estoque."}</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="modalWhatsapp">💬 Perguntar</button>
+      <button class="btn btn-primary" id="modalAdd" ${semEstoque ? "disabled" : ""}>Adicionar ao carrinho</button>
+    </div>
+  `;
+
+  if (imagens.length > 1){
+    document.getElementById("modalPrev").addEventListener("click", () => navegarGaleria(-1));
+    document.getElementById("modalNext").addEventListener("click", () => navegarGaleria(1));
+    modalGaleria.querySelectorAll("[data-dot]").forEach(dot => {
+      dot.addEventListener("click", () => {
+        indiceGaleriaAtual = Number(dot.dataset.dot);
+        renderizarModal();
+      });
+    });
+  }
+
+  document.getElementById("modalWhatsapp").addEventListener("click", () => {
+    const texto = `Olá! Tenho interesse no perfume *${produto.nome}* (R$ ${formatarPreco(produto.preco)}). Pode me passar mais detalhes?`;
+    window.open(linkWhatsapp(WHATSAPP_NUMERO, texto), "_blank");
+  });
+  document.getElementById("modalAdd").addEventListener("click", () => {
+    adicionarAoCarrinho(produto.id);
+  });
+}
+
+function navegarGaleria(delta){
+  const imagens = produtoModalAtual.imagens && produtoModalAtual.imagens.length > 0 ? produtoModalAtual.imagens : [IMAGEM_FALLBACK];
+  indiceGaleriaAtual = (indiceGaleriaAtual + delta + imagens.length) % imagens.length;
+  renderizarModal();
+}
+
+modalClose.addEventListener("click", fecharModalProduto);
+modalOverlay.addEventListener("click", (ev) => {
+  if (ev.target === modalOverlay) fecharModalProduto();
+});
+document.addEventListener("keydown", (ev) => {
+  if (!modalOverlay.classList.contains("aberto")) return;
+  if (ev.key === "Escape") fecharModalProduto();
+  if (ev.key === "ArrowLeft") navegarGaleria(-1);
+  if (ev.key === "ArrowRight") navegarGaleria(1);
+});
 
 // -------- Render carrinho / drawer --------
 const drawer = document.getElementById("drawer");
