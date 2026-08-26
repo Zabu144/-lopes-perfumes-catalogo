@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <style>
 
   /* ============================================
@@ -710,17 +711,18 @@ const WHATSAPP_NUMERO = "5582998380780";
 const WHATSAPP_EXIBICAO = "(82) 99838-0780";
 
 /* ============================================================
-   CATÁLOGO DE PRODUTOS
-   Para adicionar/editar/remover um perfume, edite a lista abaixo.
-   Cada item precisa de: id (único), nome, marca, preco, descricao,
-   estoque (número) e emoji (ícone simples do card).
+   CATÁLOGO VIA GOOGLE SHEETS
+   Cole aqui o link da planilha publicada como CSV (veja o README
+   para o passo a passo de como gerar esse link). Enquanto esse
+   campo estiver vazio, ou se a planilha não carregar por algum
+   motivo, o site usa o catálogo de exemplo abaixo como reserva.
    ============================================================ */
 
-// As imagens abaixo são fotos de banco gratuito (Pixabay, licença livre para uso
-// comercial) usadas como PLACEHOLDER. Troque o campo "imagem" pela foto real de
-// cada perfume assim que tiver — pode ser uma foto tirada de celular mesmo, ou
-// um link de imagem já hospedada. Veja o README para mais detalhes.
-const PRODUTOS = [
+const GOOGLE_SHEETS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSArL4TTqBbnlgrc-qBW-njLoLG5SaHen6dLYfYzN9HuKwQ-07FMGIsa5BT7mw7ZMuGpHSqspqybPpi/pub?output=csv";
+
+// Catálogo de exemplo — usado como reserva caso a planilha não esteja
+// configurada ainda, ou caso ela falhe ao carregar (ex: sem internet).
+const PRODUTOS_PADRAO = [
   { id: 1, nome: "Eau de Parfum Paris", marca: "Importado", preco: 150.00, descricao: "Perfume sofisticado e elegante, com notas florais e amadeiradas.", estoque: 10, imagem: "https://cdn.pixabay.com/photo/2016/06/03/15/45/perfume-1433654_1280.jpg" },
   { id: 2, nome: "Perfume Milano", marca: "Importado", preco: 120.00, descricao: "Aroma masculino clássico, marcante e envolvente.", estoque: 15, imagem: "https://cdn.pixabay.com/photo/2023/04/30/11/53/cologne-7960372_1280.jpg" },
   { id: 3, nome: "Fragância Versailles", marca: "Importado", preco: 180.00, descricao: "Perfume floral e delicado, ideal para o dia a dia.", estoque: 8, imagem: "https://cdn.pixabay.com/photo/2018/05/13/18/06/scent-of-roses-3397281_1280.jpg" },
@@ -728,6 +730,45 @@ const PRODUTOS = [
   { id: 5, nome: "Nuit d'Or", marca: "Importado", preco: 210.00, descricao: "Fragrância intensa e envolvente para ocasiões especiais.", estoque: 6, imagem: "https://cdn.pixabay.com/photo/2019/04/23/06/10/perfume-4148638_1280.jpg" },
   { id: 6, nome: "Brisa Marina", marca: "Importado", preco: 135.00, descricao: "Aroma leve e aquático, perfeito para o verão.", estoque: 12, imagem: "https://cdn.pixabay.com/photo/2023/01/14/11/01/perfume-7717936_1280.jpg" },
 ];
+
+let PRODUTOS = PRODUTOS_PADRAO;
+
+async function carregarProdutos(){
+  if (!GOOGLE_SHEETS_CSV_URL){
+    renderizarTudo();
+    return;
+  }
+
+  grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:var(--ink-faint);padding:50px 0;">Carregando catálogo…</p>`;
+
+  try {
+    const resposta = await fetch(GOOGLE_SHEETS_CSV_URL);
+    if (!resposta.ok) throw new Error("Falha ao buscar a planilha");
+    const textoCsv = await resposta.text();
+
+    const resultado = Papa.parse(textoCsv, { header: true, skipEmptyLines: true });
+
+    const produtosDaPlanilha = resultado.data
+      .filter(linha => linha.nome && linha.nome.trim())
+      .map(linha => ({
+        id: Number(linha.id),
+        nome: linha.nome.trim(),
+        marca: (linha.marca || "").trim(),
+        preco: parseFloat(String(linha.preco).replace(",", ".")) || 0,
+        descricao: (linha.descricao || "").trim(),
+        estoque: parseInt(linha.estoque, 10) || 0,
+        imagem: (linha.imagem || "").trim(),
+      }));
+
+    if (produtosDaPlanilha.length > 0){
+      PRODUTOS = produtosDaPlanilha;
+    }
+  } catch (erro) {
+    console.warn("Não foi possível carregar a planilha, usando catálogo padrão.", erro);
+  }
+
+  renderizarTudo();
+}
 
 /* ============================================================
    A partir daqui é lógica do site — não precisa editar
@@ -944,7 +985,7 @@ btnFinalizar.addEventListener("click", () => {
 });
 
 // -------- Inicialização --------
-renderizarTudo();
+carregarProdutos();
 </script>
 
 </body>
