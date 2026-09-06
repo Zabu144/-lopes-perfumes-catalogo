@@ -957,7 +957,7 @@ async function carregarProdutos(){
         const colunaImagens = linha.imagens || linha.imagem || "";
         const imagens = colunaImagens
           .split("|")
-          .map(s => resolverUrlImagem(s))
+          .map(s => s.trim())
           .filter(Boolean);
 
         return {
@@ -1010,22 +1010,61 @@ const IMAGEM_FALLBACK = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
   </svg>
 `);
 
-// Converte links de compartilhamento do Google Drive (que não funcionam como
-// imagem direta) para um formato que o navegador consegue exibir. Links de
-// outros lugares (Pixabay, links diretos, etc.) passam sem alteração.
-function resolverUrlImagem(url){
-  if (!url) return "";
+// Links do Google Drive não servem a imagem diretamente — precisam ser
+// convertidos. Só que nenhum formato de conversão funciona 100% das vezes
+// (depende de como o Google decidiu tratar aquele arquivo específico), então
+// geramos uma pequena lista de formatos alternativos para tentar em ordem.
+// Se um formato falhar ao carregar no navegador, o próximo é tentado
+// automaticamente, antes de cair no ícone reserva.
+function candidatosImagem(url){
+  if (!url) return [];
   url = url.trim();
+  if (!url) return [];
 
   const driveMatchD = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
   const driveMatchId = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
   const driveId = driveMatchD ? driveMatchD[1] : (url.includes("drive.google.com") && driveMatchId ? driveMatchId[1] : null);
 
   if (driveId){
-    return `https://drive.google.com/thumbnail?id=${driveId}&sz=w1000`;
+    return [
+      `https://lh3.googleusercontent.com/d/${driveId}=w1000`,
+      `https://drive.google.com/thumbnail?id=${driveId}&sz=w1000`,
+      `https://drive.google.com/uc?export=view&id=${driveId}`,
+    ];
   }
 
-  return url;
+  return [url];
+}
+
+// Monta a tag <img> já preparada para, se a primeira URL falhar, tentar as
+// próximas automaticamente, e só usar o ícone reserva se todas falharem.
+function tagImagem(urlOriginal, alt, atributosExtras){
+  atributosExtras = atributosExtras || "";
+  const candidatos = candidatosImagem(urlOriginal);
+
+  if (candidatos.length === 0){
+    return `<img src="${IMAGEM_FALLBACK}" alt="${alt}" ${atributosExtras}>`;
+  }
+
+  const primeira = candidatos[0];
+  const resto = JSON.stringify(candidatos.slice(1)).replace(/"/g, "&quot;");
+
+  return `<img src="${primeira}" alt="${alt}" data-fallbacks='${resto}' onerror="avancarFallbackImagem(this)" ${atributosExtras}>`;
+}
+
+// Chamado automaticamente quando uma imagem falha ao carregar no navegador.
+function avancarFallbackImagem(img){
+  let restantes = [];
+  try { restantes = JSON.parse((img.dataset.fallbacks || "[]").replace(/&quot;/g, '"')); } catch (e) { restantes = []; }
+
+  if (restantes.length > 0){
+    const proxima = restantes.shift();
+    img.dataset.fallbacks = JSON.stringify(restantes);
+    img.src = proxima;
+  } else {
+    img.onerror = null;
+    img.src = IMAGEM_FALLBACK;
+  }
 }
 
 function linkWhatsapp(numero, texto){
@@ -1100,14 +1139,14 @@ function renderizarCatalogo(){
     const estoqueBaixo = produto.estoque > 0 && produto.estoque <= 5;
     const semEstoque = produto.estoque === 0;
 
-    const capa = produto.imagens && produto.imagens[0] ? produto.imagens[0] : IMAGEM_FALLBACK;
+    const capaOriginal = produto.imagens && produto.imagens[0] ? produto.imagens[0] : "";
 
     const card = document.createElement("div");
     card.className = "card";
     card.dataset.abrirProduto = produto.id;
     card.innerHTML = `
       <div class="card-image">
-        <img src="${capa}" alt="${produto.nome}" loading="lazy" onerror="this.onerror=null;this.src='${IMAGEM_FALLBACK}';">
+        ${tagImagem(capaOriginal, produto.nome, 'loading="lazy"')}
         ${produto.imagens && produto.imagens.length > 1 ? `<span class="badge-fotos">📷 ${produto.imagens.length}</span>` : ""}
         ${semEstoque ? '<span class="badge">Esgotado</span>' : estoqueBaixo ? '<span class="badge">Últimas unidades</span>' : ""}
       </div>
@@ -1185,7 +1224,7 @@ function renderizarModal(){
   const estoqueBaixo = produto.estoque > 0 && produto.estoque <= 5;
 
   modalGaleria.innerHTML = `
-    <img src="${imagens[indiceGaleriaAtual]}" alt="${produto.nome}" onerror="this.onerror=null;this.src='${IMAGEM_FALLBACK}';">
+    ${tagImagem(imagens[indiceGaleriaAtual] === IMAGEM_FALLBACK ? "" : imagens[indiceGaleriaAtual], produto.nome)}
     ${imagens.length > 1 ? `
       <button class="modal-galeria-nav prev" id="modalPrev" aria-label="Foto anterior">‹</button>
       <button class="modal-galeria-nav next" id="modalNext" aria-label="Próxima foto">›</button>
