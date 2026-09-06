@@ -279,13 +279,19 @@
     align-items: flex-end;
     justify-content: space-between;
     gap: 24px;
-    margin-bottom: 40px;
+    margin-bottom: 18px;
     flex-wrap: wrap;
   }
   .catalogo-head h2{
     font-family: var(--serif);
     font-weight: 500;
     font-size: 1.9rem;
+  }
+  .catalogo-controles{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    flex-wrap: wrap;
   }
   .busca{
     background: var(--bg-elev);
@@ -297,6 +303,146 @@
     min-width: 220px;
   }
   .busca::placeholder{ color: var(--ink-faint); }
+
+  .select-ordenar{
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    color: var(--ink);
+    font-size: .85rem;
+    cursor: pointer;
+  }
+
+  .btn-filtro{
+    position: relative;
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 10px 16px;
+    border-radius: var(--radius);
+    font-size: .85rem;
+    white-space: nowrap;
+    transition: border-color .2s ease;
+  }
+  .btn-filtro:hover{ border-color: var(--gold-soft); }
+
+  .badge-filtro-count{
+    background: var(--gold);
+    color: var(--bg);
+    font-weight: 700;
+    font-size: .7rem;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    padding: 0 4px;
+  }
+
+  /* -------- status do catálogo: contagem + chips de filtros ativos -------- */
+  .catalogo-status{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 26px;
+  }
+  .resultado-contagem{
+    font-size: .82rem;
+    color: var(--ink-faint);
+    white-space: nowrap;
+  }
+  .filtros-chips{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+  .chip{
+    display:flex;
+    align-items:center;
+    gap: 6px;
+    background: var(--bg-elev);
+    border: 1px solid var(--gold-soft);
+    color: var(--ink);
+    font-size: .78rem;
+    padding: 6px 8px 6px 12px;
+    border-radius: 20px;
+  }
+  .chip button{
+    background:none;
+    border:none;
+    color: var(--ink-faint);
+    font-size: .95rem;
+    line-height: 1;
+    padding: 2px;
+  }
+  .chip button:hover{ color: var(--wine); }
+  .chip-limpar{
+    background:none;
+    border:none;
+    color: var(--gold);
+    font-size: .78rem;
+    text-decoration: underline;
+  }
+
+  /* -------- painel de filtros (reaproveita a base visual do drawer) -------- */
+  .filtro-corpo{ padding: 6px 24px 18px; }
+  .filtro-secao{
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .filtro-secao:first-child{ padding-top: 16px; }
+  .filtro-secao:last-child{ border-bottom: none; }
+  .filtro-secao-titulo{
+    font-size: .74rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 12px;
+  }
+  .filtro-opcao{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: .9rem;
+    cursor: pointer;
+  }
+  .filtro-opcao input{
+    width: 18px; height: 18px;
+    accent-color: var(--gold);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .filtro-preco{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+  }
+  .filtro-preco input{
+    width: 100%;
+    background: var(--bg-elev-2);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 10px 12px;
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: .88rem;
+  }
+  .filtro-preco span{ color: var(--ink-faint); font-size: .85rem; }
+  .filtro-vazio{ color: var(--ink-faint); font-size: .85rem; }
+
+  .filtro-foot-actions{
+    display:flex;
+    gap: 10px;
+  }
+  .filtro-foot-actions .btn{ flex:1; justify-content:center; }
 
   .grid{
     display: grid;
@@ -895,8 +1041,12 @@
   @media (max-width: 560px){
     .wrap{ padding: 0 16px; }
     .hero{ padding: 56px 0 44px; }
-    .catalogo-head{ align-items: stretch; margin-bottom: 24px; }
+    .catalogo-head{ align-items: stretch; margin-bottom: 14px; }
     .busca{ width: 100%; }
+    .catalogo-controles{ flex-direction: column; align-items: stretch; }
+    .select-ordenar, .btn-filtro{ width: 100%; justify-content: center; }
+    .catalogo-status{ flex-direction: column; align-items: stretch; }
+    .filtros-chips{ justify-content: flex-start; }
     .hero-ctas{ flex-direction: column; align-items: stretch; }
     .hero-ctas .btn{ justify-content: center; }
     .footer-inner{ flex-direction: column; align-items: flex-start; }
@@ -983,7 +1133,22 @@
   <div class="wrap">
     <div class="catalogo-head">
       <h2>Catálogo</h2>
-      <input type="search" class="busca" id="busca" placeholder="Buscar perfume ou marca…">
+      <div class="catalogo-controles">
+        <input type="search" class="busca" id="busca" placeholder="Buscar perfume ou marca…">
+        <select class="select-ordenar" id="selectOrdenar" aria-label="Ordenar por">
+          <option value="relevancia">Mais relevantes</option>
+          <option value="menor-preco">Menor preço</option>
+          <option value="maior-preco">Maior preço</option>
+          <option value="nome-az">Nome A-Z</option>
+        </select>
+        <button class="btn-filtro" id="btnAbrirFiltro" aria-haspopup="dialog">
+          ⚙️ Filtrar <span class="badge-filtro-count" id="badgeFiltroCount" hidden>0</span>
+        </button>
+      </div>
+    </div>
+    <div class="catalogo-status">
+      <span class="resultado-contagem" id="resultadoContagem"></span>
+      <div class="filtros-chips" id="filtrosChips"></div>
     </div>
     <div class="grid" id="grid"></div>
     <p class="vazio" id="vazio" hidden>Nenhum perfume encontrado.</p>
@@ -1110,6 +1275,24 @@
     <p class="aviso-campo" id="avisoNome">Preencha seu nome para continuar.</p>
 
     <button class="btn btn-whatsapp" id="btnFinalizar">Finalizar pedido no WhatsApp</button>
+  </div>
+</aside>
+
+<div class="overlay" id="overlayFiltro"></div>
+
+<aside class="drawer" id="filtroDrawer" role="dialog" aria-label="Filtros do catálogo">
+  <div class="drawer-head">
+    <h3>Filtros</h3>
+    <button class="drawer-close" id="btnFecharFiltro" aria-label="Fechar filtros">×</button>
+  </div>
+
+  <div class="drawer-itens filtro-corpo" id="filtroCorpo"></div>
+
+  <div class="drawer-foot">
+    <div class="filtro-foot-actions">
+      <button class="btn btn-ghost" id="btnLimparFiltro">Limpar filtros</button>
+      <button class="btn btn-primary" id="btnAplicarFiltro">Ver resultados</button>
+    </div>
   </div>
 </aside>
 
@@ -1372,15 +1555,199 @@ function totalItens(){
 const grid = document.getElementById("grid");
 const vazio = document.getElementById("vazio");
 const busca = document.getElementById("busca");
+const selectOrdenar = document.getElementById("selectOrdenar");
+const resultadoContagem = document.getElementById("resultadoContagem");
+const filtrosChips = document.getElementById("filtrosChips");
+const badgeFiltroCount = document.getElementById("badgeFiltroCount");
+
+// -------- Filtros (marca, preço, estoque, ordenação) --------
+const btnAbrirFiltro = document.getElementById("btnAbrirFiltro");
+const btnFecharFiltro = document.getElementById("btnFecharFiltro");
+const btnAplicarFiltro = document.getElementById("btnAplicarFiltro");
+const btnLimparFiltro = document.getElementById("btnLimparFiltro");
+const filtroDrawer = document.getElementById("filtroDrawer");
+const overlayFiltro = document.getElementById("overlayFiltro");
+const filtroCorpo = document.getElementById("filtroCorpo");
+
+let filtroState = {
+  ordenar: "relevancia",
+  marcas: new Set(),
+  precoMin: null,
+  precoMax: null,
+  somenteEstoque: false,
+};
+
+function marcasDisponiveis(){
+  return [...new Set(PRODUTOS.map(p => (p.marca || "").trim()).filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b, "pt-BR"));
+}
+
+function construirPainelFiltro(){
+  const marcas = marcasDisponiveis();
+
+  filtroCorpo.innerHTML = `
+    <div class="filtro-secao">
+      <div class="filtro-secao-titulo">Marca</div>
+      ${marcas.length > 0 ? marcas.map(m => `
+        <label class="filtro-opcao">
+          <input type="checkbox" value="${m}" data-filtro-marca ${filtroState.marcas.has(m) ? "checked" : ""}>
+          ${m}
+        </label>
+      `).join("") : `<p class="filtro-vazio">Nenhuma marca cadastrada.</p>`}
+    </div>
+    <div class="filtro-secao">
+      <div class="filtro-secao-titulo">Faixa de preço</div>
+      <div class="filtro-preco">
+        <input type="number" min="0" step="1" inputmode="decimal" placeholder="Mín." id="filtroPrecoMin" value="${filtroState.precoMin ?? ""}">
+        <span>até</span>
+        <input type="number" min="0" step="1" inputmode="decimal" placeholder="Máx." id="filtroPrecoMax" value="${filtroState.precoMax ?? ""}">
+      </div>
+    </div>
+    <div class="filtro-secao">
+      <div class="filtro-secao-titulo">Disponibilidade</div>
+      <label class="filtro-opcao">
+        <input type="checkbox" id="filtroSomenteEstoque" ${filtroState.somenteEstoque ? "checked" : ""}>
+        Somente produtos em estoque
+      </label>
+    </div>
+  `;
+}
+
+// Lê o que está marcado/preenchido no painel agora (ainda não aplicado)
+function lerEstadoPainelFiltro(){
+  return {
+    marcas: new Set([...filtroCorpo.querySelectorAll("[data-filtro-marca]:checked")].map(el => el.value)),
+    precoMin: document.getElementById("filtroPrecoMin").value !== "" ? parseFloat(document.getElementById("filtroPrecoMin").value) : null,
+    precoMax: document.getElementById("filtroPrecoMax").value !== "" ? parseFloat(document.getElementById("filtroPrecoMax").value) : null,
+    somenteEstoque: document.getElementById("filtroSomenteEstoque").checked,
+  };
+}
+
+function contarComEstado(estado){
+  const termo = busca.value.trim().toLowerCase();
+  return PRODUTOS.filter(p => {
+    const combinaTexto = p.nome.toLowerCase().includes(termo) || p.marca.toLowerCase().includes(termo);
+    const combinaMarca = estado.marcas.size === 0 || estado.marcas.has((p.marca || "").trim());
+    const combinaPrecoMin = estado.precoMin === null || p.preco >= estado.precoMin;
+    const combinaPrecoMax = estado.precoMax === null || p.preco <= estado.precoMax;
+    const combinaEstoque = !estado.somenteEstoque || p.estoque > 0;
+    return combinaTexto && combinaMarca && combinaPrecoMin && combinaPrecoMax && combinaEstoque;
+  }).length;
+}
+
+// Atualiza o texto do botão "Ver X resultados" em tempo real, conforme a pessoa marca as opções
+function atualizarBotaoAplicarFiltro(){
+  const qtd = contarComEstado(lerEstadoPainelFiltro());
+  btnAplicarFiltro.textContent = `Ver ${qtd} ${qtd === 1 ? "resultado" : "resultados"}`;
+}
+
+filtroCorpo.addEventListener("input", atualizarBotaoAplicarFiltro);
+filtroCorpo.addEventListener("change", atualizarBotaoAplicarFiltro);
+
+function abrirFiltros(){
+  construirPainelFiltro();
+  atualizarBotaoAplicarFiltro();
+  filtroDrawer.classList.add("aberto");
+  overlayFiltro.classList.add("aberto");
+}
+
+function fecharFiltros(){
+  filtroDrawer.classList.remove("aberto");
+  overlayFiltro.classList.remove("aberto");
+}
+
+btnAbrirFiltro.addEventListener("click", abrirFiltros);
+btnFecharFiltro.addEventListener("click", fecharFiltros);
+overlayFiltro.addEventListener("click", fecharFiltros);
+
+btnAplicarFiltro.addEventListener("click", () => {
+  filtroState = { ...filtroState, ...lerEstadoPainelFiltro() };
+  fecharFiltros();
+  renderizarCatalogo();
+});
+
+btnLimparFiltro.addEventListener("click", () => {
+  filtroState.marcas = new Set();
+  filtroState.precoMin = null;
+  filtroState.precoMax = null;
+  filtroState.somenteEstoque = false;
+  construirPainelFiltro();
+  atualizarBotaoAplicarFiltro();
+  renderizarCatalogo();
+});
+
+selectOrdenar.addEventListener("change", () => {
+  filtroState.ordenar = selectOrdenar.value;
+  renderizarCatalogo();
+});
+
+// Atualiza a contagem de resultados e os "chips" de filtros ativos (com opção de remover cada um)
+function atualizarStatusFiltro(qtd){
+  resultadoContagem.textContent = `${qtd} ${qtd === 1 ? "perfume encontrado" : "perfumes encontrados"}`;
+
+  const chips = [];
+  filtroState.marcas.forEach(m => chips.push({
+    label: m,
+    remover: () => filtroState.marcas.delete(m),
+  }));
+  if (filtroState.precoMin !== null){
+    chips.push({ label: `A partir de R$ ${formatarPreco(filtroState.precoMin)}`, remover: () => { filtroState.precoMin = null; } });
+  }
+  if (filtroState.precoMax !== null){
+    chips.push({ label: `Até R$ ${formatarPreco(filtroState.precoMax)}`, remover: () => { filtroState.precoMax = null; } });
+  }
+  if (filtroState.somenteEstoque){
+    chips.push({ label: "Em estoque", remover: () => { filtroState.somenteEstoque = false; } });
+  }
+
+  const totalAtivos = chips.length;
+  badgeFiltroCount.hidden = totalAtivos === 0;
+  badgeFiltroCount.textContent = totalAtivos;
+
+  filtrosChips.innerHTML = chips
+    .map((c, i) => `<span class="chip" data-chip-index="${i}">${c.label} <button type="button" aria-label="Remover filtro">×</button></span>`)
+    .join("") + (chips.length > 0 ? `<button type="button" class="chip-limpar" id="chipLimparTudo">Limpar tudo</button>` : "");
+
+  filtrosChips.querySelectorAll(".chip button").forEach((btn, i) => {
+    btn.addEventListener("click", () => {
+      chips[i].remover();
+      renderizarCatalogo();
+    });
+  });
+
+  const chipLimparTudo = document.getElementById("chipLimparTudo");
+  if (chipLimparTudo){
+    chipLimparTudo.addEventListener("click", () => {
+      filtroState.marcas = new Set();
+      filtroState.precoMin = null;
+      filtroState.precoMax = null;
+      filtroState.somenteEstoque = false;
+      renderizarCatalogo();
+    });
+  }
+}
 
 function renderizarCatalogo(){
   const termo = busca.value.trim().toLowerCase();
-  const lista = PRODUTOS.filter(p =>
-    p.nome.toLowerCase().includes(termo) || p.marca.toLowerCase().includes(termo)
-  );
+
+  let lista = PRODUTOS.filter(p => {
+    const combinaTexto = p.nome.toLowerCase().includes(termo) || p.marca.toLowerCase().includes(termo);
+    const combinaMarca = filtroState.marcas.size === 0 || filtroState.marcas.has((p.marca || "").trim());
+    const combinaPrecoMin = filtroState.precoMin === null || p.preco >= filtroState.precoMin;
+    const combinaPrecoMax = filtroState.precoMax === null || p.preco <= filtroState.precoMax;
+    const combinaEstoque = !filtroState.somenteEstoque || p.estoque > 0;
+    return combinaTexto && combinaMarca && combinaPrecoMin && combinaPrecoMax && combinaEstoque;
+  });
+
+  switch (filtroState.ordenar){
+    case "menor-preco": lista = lista.slice().sort((a, b) => a.preco - b.preco); break;
+    case "maior-preco": lista = lista.slice().sort((a, b) => b.preco - a.preco); break;
+    case "nome-az": lista = lista.slice().sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR")); break;
+  }
 
   grid.innerHTML = "";
   vazio.hidden = lista.length > 0;
+  atualizarStatusFiltro(lista.length);
 
   lista.forEach(produto => {
     const estoqueBaixo = produto.estoque > 0 && produto.estoque <= 5;
