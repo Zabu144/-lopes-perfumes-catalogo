@@ -329,6 +329,7 @@
     transition: border-color .2s ease;
   }
   .btn-filtro:hover{ border-color: var(--gold-soft); }
+  .btn-filtro.ativo{ border-color: var(--wine); color: #e0a9a9; }
 
   .badge-filtro-count{
     background: var(--gold);
@@ -496,6 +497,16 @@
     gap: 14px;
     flex: 1;
   }
+  .card-badges-topo{
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
   .badge-fotos{
     position: absolute;
     bottom: 12px;
@@ -509,10 +520,6 @@
     color: var(--ink-muted);
   }
   .badge{
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    z-index: 2;
     font-size: .66rem;
     letter-spacing: .08em;
     text-transform: uppercase;
@@ -523,6 +530,35 @@
     color: #e0a9a9;
     white-space: nowrap;
   }
+  .selo{
+    font-size: .64rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border-radius: 20px;
+    border: 1px solid var(--gold-soft);
+    background: rgba(23,19,15,.8);
+    color: var(--gold);
+    white-space: nowrap;
+  }
+  .favorito-btn{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 3;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: rgba(23,19,15,.65);
+    border: 1px solid var(--line);
+    color: #f4ecdd;
+    display: grid;
+    place-items: center;
+    font-size: 1rem;
+    line-height: 1;
+    transition: transform .15s ease, border-color .2s ease;
+  }
+  .favorito-btn:hover{ border-color: var(--gold-soft); transform: scale(1.08); }
+  .favorito-btn.ativo{ color: #e0a9a9; border-color: var(--wine); }
   .card-marca{
     font-size: .68rem;
     letter-spacing: .14em;
@@ -551,16 +587,40 @@
     gap: 10px;
     margin-top: 4px;
   }
+  .card-preco-bloco{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .preco-antigo{
+    font-size: .74rem;
+    color: var(--ink-faint);
+    text-decoration: line-through;
+  }
   .card-preco{
     font-family: var(--serif);
     font-size: 1.3rem;
     color: var(--gold);
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
   }
   .card-preco small{
     font-family: var(--sans);
     font-size: .68rem;
     color: var(--ink-faint);
     margin-right: 3px;
+  }
+  .desconto-tag{
+    font-family: var(--sans);
+    font-size: .66rem;
+    font-weight: 700;
+    color: #e0a9a9;
+    border: 1px solid var(--wine);
+    border-radius: 10px;
+    padding: 1px 6px;
+    white-space: nowrap;
   }
   .card-actions{
     display:flex;
@@ -607,6 +667,24 @@
   }
   .cart-fab:hover{ transform: translateY(-2px); }
   .cart-fab[hidden]{ display:none; }
+
+  .whatsapp-fab{
+    position: fixed;
+    left: calc(20px + env(safe-area-inset-left));
+    bottom: calc(22px + env(safe-area-inset-bottom));
+    z-index: 44;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--whatsapp);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 1.5rem;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(0,0,0,.4);
+    transition: transform .2s ease, background .2s ease;
+  }
+  .whatsapp-fab:hover{ background: var(--whatsapp-hover); transform: translateY(-2px); }
 
   .overlay{
     position: fixed;
@@ -839,6 +917,8 @@
     place-items: center;
   }
   .modal-galeria-nav:hover{ border-color: var(--gold-soft); }
+  .modal-galeria .favorito-btn{ top: 14px; right: 14px; }
+  .modal-galeria .card-badges-topo{ top: 14px; left: 14px; }
   .modal-galeria-nav.prev{ left: 12px; }
   .modal-galeria-nav.next{ right: 12px; }
 
@@ -880,10 +960,24 @@
     font-weight: 500;
     line-height: 1.2;
   }
+  .modal-preco-bloco{
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .modal-preco-antigo{
+    font-size: .82rem;
+    color: var(--ink-faint);
+    text-decoration: line-through;
+  }
   .modal-preco{
     font-family: var(--serif);
     font-size: 1.6rem;
     color: var(--gold);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
   }
   .modal-preco small{
     font-family: var(--sans);
@@ -1028,6 +1122,7 @@
     .qtd-btn{ width: 34px; height: 34px; }
     .modal-galeria-nav{ width: 40px; height: 40px; }
     .modal-close{ width: 38px; height: 38px; }
+    .favorito-btn{ width: 38px; height: 38px; font-size: 1.1rem; }
   }
 
   /* Cabeçalho mais compacto em telas bem estreitas */
@@ -1067,7 +1162,9 @@
     .card-preco{ font-size: 1.05rem; }
     .card-actions{ gap: 6px; }
     .icon-btn{ width: 36px; height: 36px; font-size: .9rem; }
-    .badge, .badge-fotos{ font-size: .6rem; padding: 3px 7px; }
+    .badge, .badge-fotos, .selo{ font-size: .6rem; padding: 3px 7px; }
+    .favorito-btn{ width: 32px; height: 32px; font-size: .85rem; top: 8px; right: 8px; }
+    .card-badges-topo{ top: 8px; left: 8px; }
   }
 
   /* Numa faixa muito estreita (telefones pequenos), volta a 1 coluna para não espremer demais */
@@ -1143,6 +1240,9 @@
         </select>
         <button class="btn-filtro" id="btnAbrirFiltro" aria-haspopup="dialog">
           ⚙️ Filtrar <span class="badge-filtro-count" id="badgeFiltroCount" hidden>0</span>
+        </button>
+        <button class="btn-filtro" id="btnFavoritos" aria-pressed="false">
+          <span id="iconeFavoritos">🤍</span> Favoritos <span class="badge-filtro-count" id="badgeFavoritosCount" hidden>0</span>
         </button>
       </div>
     </div>
@@ -1244,6 +1344,8 @@
   🛍️ <span id="fabTexto">0 itens</span>
 </button>
 
+<a href="#" id="linkWhatsappFab" class="whatsapp-fab" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">💬</a>
+
 <div class="overlay" id="overlay"></div>
 
 <aside class="drawer" id="drawer" role="dialog" aria-label="Carrinho de compras">
@@ -1332,12 +1434,12 @@ const GOOGLE_SHEETS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1v
 // Catálogo de exemplo — usado como reserva caso a planilha não esteja
 // configurada ainda, ou caso ela falhe ao carregar (ex: sem internet).
 const PRODUTOS_PADRAO = [
-  { id: 1, nome: "Eau de Parfum Paris", marca: "Importado", preco: 150.00, descricao: "Perfume sofisticado e elegante, com notas florais e amadeiradas.", estoque: 10, imagens: ["https://cdn.pixabay.com/photo/2016/06/03/15/45/perfume-1433654_1280.jpg"] },
-  { id: 2, nome: "Perfume Milano", marca: "Importado", preco: 120.00, descricao: "Aroma masculino clássico, marcante e envolvente.", estoque: 15, imagens: ["https://cdn.pixabay.com/photo/2023/04/30/11/53/cologne-7960372_1280.jpg"] },
-  { id: 3, nome: "Fragância Versailles", marca: "Importado", preco: 180.00, descricao: "Perfume floral e delicado, ideal para o dia a dia.", estoque: 8, imagens: ["https://cdn.pixabay.com/photo/2018/05/13/18/06/scent-of-roses-3397281_1280.jpg"] },
-  { id: 4, nome: "Essência Toscana", marca: "Importado", preco: 165.00, descricao: "Notas cítricas e amadeiradas, fresco e sofisticado.", estoque: 3, imagens: ["https://cdn.pixabay.com/photo/2016/07/07/17/12/fragrance-1502807_1280.jpg"] },
-  { id: 5, nome: "Nuit d'Or", marca: "Importado", preco: 210.00, descricao: "Fragrância intensa e envolvente para ocasiões especiais.", estoque: 6, imagens: ["https://cdn.pixabay.com/photo/2019/04/23/06/10/perfume-4148638_1280.jpg"] },
-  { id: 6, nome: "Brisa Marina", marca: "Importado", preco: 135.00, descricao: "Aroma leve e aquático, perfeito para o verão.", estoque: 12, imagens: ["https://cdn.pixabay.com/photo/2023/01/14/11/01/perfume-7717936_1280.jpg"] },
+  { id: 1, nome: "Eau de Parfum Paris", marca: "Importado", preco: 150.00, precoDe: null, selo: "Mais vendido", descricao: "Perfume sofisticado e elegante, com notas florais e amadeiradas.", estoque: 10, imagens: ["https://cdn.pixabay.com/photo/2016/06/03/15/45/perfume-1433654_1280.jpg"] },
+  { id: 2, nome: "Perfume Milano", marca: "Importado", preco: 120.00, precoDe: null, selo: "", descricao: "Aroma masculino clássico, marcante e envolvente.", estoque: 15, imagens: ["https://cdn.pixabay.com/photo/2023/04/30/11/53/cologne-7960372_1280.jpg"] },
+  { id: 3, nome: "Fragância Versailles", marca: "Importado", preco: 149.00, precoDe: 180.00, selo: "Promoção", descricao: "Perfume floral e delicado, ideal para o dia a dia.", estoque: 8, imagens: ["https://cdn.pixabay.com/photo/2018/05/13/18/06/scent-of-roses-3397281_1280.jpg"] },
+  { id: 4, nome: "Essência Toscana", marca: "Importado", preco: 165.00, precoDe: null, selo: "Novidade", descricao: "Notas cítricas e amadeiradas, fresco e sofisticado.", estoque: 3, imagens: ["https://cdn.pixabay.com/photo/2016/07/07/17/12/fragrance-1502807_1280.jpg"] },
+  { id: 5, nome: "Nuit d'Or", marca: "Importado", preco: 210.00, precoDe: null, selo: "", descricao: "Fragrância intensa e envolvente para ocasiões especiais.", estoque: 6, imagens: ["https://cdn.pixabay.com/photo/2019/04/23/06/10/perfume-4148638_1280.jpg"] },
+  { id: 6, nome: "Brisa Marina", marca: "Importado", preco: 135.00, precoDe: null, selo: "", descricao: "Aroma leve e aquático, perfeito para o verão.", estoque: 12, imagens: ["https://cdn.pixabay.com/photo/2023/01/14/11/01/perfume-7717936_1280.jpg"] },
 ];
 
 let PRODUTOS = PRODUTOS_PADRAO;
@@ -1395,6 +1497,10 @@ async function carregarProdutos(){
           nome: linha.nome.trim(),
           marca: (linha.marca || "").trim(),
           preco: parseFloat(String(linha.preco).replace(",", ".")) || 0,
+          precoDe: linha.preco_de && String(linha.preco_de).trim() !== ""
+            ? (parseFloat(String(linha.preco_de).replace(",", ".")) || null)
+            : null,
+          selo: (linha.selo || "").trim(),
           descricao: (linha.descricao || "").trim(),
           estoque: parseInt(linha.estoque, 10) || 0,
           imagens: imagens,
@@ -1504,6 +1610,7 @@ function linkWhatsapp(numero, texto){
 // Preenche links fixos de WhatsApp (hero, rodapé)
 document.getElementById("linkWhatsappHero").href = linkWhatsapp(WHATSAPP_NUMERO, "Olá! Vim pelo site e gostaria de saber mais sobre os perfumes.");
 document.getElementById("linkWhatsappFooter").href = linkWhatsapp(WHATSAPP_NUMERO, "Olá! Vim pelo site da Lopes Perfumes.");
+document.getElementById("linkWhatsappFab").href = linkWhatsapp(WHATSAPP_NUMERO, "Olá! Vim pelo site da Lopes Perfumes e queria tirar uma dúvida.");
 document.getElementById("numeroExibicao").textContent = WHATSAPP_EXIBICAO;
 
 // -------- Carrinho (localStorage) --------
@@ -1727,6 +1834,56 @@ function atualizarStatusFiltro(qtd){
   }
 }
 
+// -------- Favoritos (salvos no navegador, sem precisar de conta) --------
+const CHAVE_FAVORITOS = "lopes_favoritos";
+const btnFavoritos = document.getElementById("btnFavoritos");
+const badgeFavoritosCount = document.getElementById("badgeFavoritosCount");
+let somenteFavoritos = false;
+
+function carregarFavoritos(){
+  try {
+    const salvos = JSON.parse(localStorage.getItem(CHAVE_FAVORITOS) || "[]");
+    return new Set(Array.isArray(salvos) ? salvos : []);
+  } catch {
+    return new Set();
+  }
+}
+
+let favoritos = carregarFavoritos();
+
+function salvarFavoritos(){
+  try {
+    localStorage.setItem(CHAVE_FAVORITOS, JSON.stringify([...favoritos]));
+  } catch {
+    // Se o navegador bloquear localStorage (ex: modo privado), os favoritos
+    // simplesmente não persistem entre sessões — sem quebrar o site.
+  }
+}
+
+function alternarFavorito(id){
+  if (favoritos.has(id)) favoritos.delete(id);
+  else favoritos.add(id);
+  salvarFavoritos();
+  atualizarBadgeFavoritos();
+}
+
+function atualizarBadgeFavoritos(){
+  badgeFavoritosCount.hidden = favoritos.size === 0;
+  badgeFavoritosCount.textContent = favoritos.size;
+}
+
+const iconeFavoritos = document.getElementById("iconeFavoritos");
+
+btnFavoritos.addEventListener("click", () => {
+  somenteFavoritos = !somenteFavoritos;
+  btnFavoritos.classList.toggle("ativo", somenteFavoritos);
+  btnFavoritos.setAttribute("aria-pressed", String(somenteFavoritos));
+  iconeFavoritos.textContent = somenteFavoritos ? "❤️" : "🤍";
+  renderizarCatalogo();
+});
+
+atualizarBadgeFavoritos();
+
 function renderizarCatalogo(){
   const termo = busca.value.trim().toLowerCase();
 
@@ -1736,7 +1893,8 @@ function renderizarCatalogo(){
     const combinaPrecoMin = filtroState.precoMin === null || p.preco >= filtroState.precoMin;
     const combinaPrecoMax = filtroState.precoMax === null || p.preco <= filtroState.precoMax;
     const combinaEstoque = !filtroState.somenteEstoque || p.estoque > 0;
-    return combinaTexto && combinaMarca && combinaPrecoMin && combinaPrecoMax && combinaEstoque;
+    const combinaFavorito = !somenteFavoritos || favoritos.has(p.id);
+    return combinaTexto && combinaMarca && combinaPrecoMin && combinaPrecoMax && combinaEstoque && combinaFavorito;
   });
 
   switch (filtroState.ordenar){
@@ -1747,11 +1905,18 @@ function renderizarCatalogo(){
 
   grid.innerHTML = "";
   vazio.hidden = lista.length > 0;
+  vazio.textContent = (somenteFavoritos && lista.length === 0)
+    ? "Você ainda não favoritou nenhum perfume. Toque no coração de um produto para salvá-lo aqui."
+    : "Nenhum perfume encontrado.";
   atualizarStatusFiltro(lista.length);
 
   lista.forEach(produto => {
     const estoqueBaixo = produto.estoque > 0 && produto.estoque <= 5;
     const semEstoque = produto.estoque === 0;
+    const favoritado = favoritos.has(produto.id);
+
+    const temDesconto = produto.precoDe && produto.precoDe > produto.preco;
+    const percentualDesconto = temDesconto ? Math.round((1 - produto.preco / produto.precoDe) * 100) : 0;
 
     const capaOriginal = produto.imagens && produto.imagens[0] ? produto.imagens[0] : "";
 
@@ -1761,8 +1926,12 @@ function renderizarCatalogo(){
     card.innerHTML = `
       <div class="card-image">
         ${tagImagem(capaOriginal, produto.nome, 'loading="lazy"')}
+        <div class="card-badges-topo">
+          ${produto.selo ? `<span class="selo">${produto.selo}</span>` : ""}
+          ${semEstoque ? '<span class="badge">Esgotado</span>' : estoqueBaixo ? '<span class="badge">Últimas unidades</span>' : ""}
+        </div>
+        <button class="favorito-btn ${favoritado ? "ativo" : ""}" title="${favoritado ? "Remover dos favoritos" : "Salvar nos favoritos"}" data-favorito="${produto.id}">${favoritado ? "❤️" : "🤍"}</button>
         ${produto.imagens && produto.imagens.length > 1 ? `<span class="badge-fotos">📷 ${produto.imagens.length}</span>` : ""}
-        ${semEstoque ? '<span class="badge">Esgotado</span>' : estoqueBaixo ? '<span class="badge">Últimas unidades</span>' : ""}
       </div>
       <div class="card-body">
         <div>
@@ -1771,7 +1940,13 @@ function renderizarCatalogo(){
         </div>
         <p class="card-desc">${produto.descricao}</p>
         <div class="card-bottom">
-          <div class="card-preco"><small>R$</small>${formatarPreco(produto.preco)}</div>
+          <div class="card-preco-bloco">
+            ${temDesconto ? `<div class="preco-antigo">R$ ${formatarPreco(produto.precoDe)}</div>` : ""}
+            <div class="card-preco">
+              <small>R$</small>${formatarPreco(produto.preco)}
+              ${temDesconto ? `<span class="desconto-tag">-${percentualDesconto}%</span>` : ""}
+            </div>
+          </div>
           <div class="card-actions">
             <button class="icon-btn" title="Perguntar no WhatsApp" data-whatsapp="${produto.id}">💬</button>
             <button class="icon-btn" title="Adicionar ao carrinho" data-add="${produto.id}" ${semEstoque ? "disabled" : ""}>＋</button>
@@ -1789,6 +1964,18 @@ function renderizarCatalogo(){
     btn.addEventListener("click", (ev) => {
       ev.stopPropagation();
       adicionarAoCarrinho(Number(btn.dataset.add));
+    });
+  });
+  grid.querySelectorAll("[data-favorito]").forEach(btn => {
+    btn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      const id = Number(btn.dataset.favorito);
+      alternarFavorito(id);
+      const agoraFavoritado = favoritos.has(id);
+      btn.classList.toggle("ativo", agoraFavoritado);
+      btn.textContent = agoraFavoritado ? "❤️" : "🤍";
+      btn.title = agoraFavoritado ? "Remover dos favoritos" : "Salvar nos favoritos";
+      if (somenteFavoritos) renderizarCatalogo();
     });
   });
   grid.querySelectorAll("[data-whatsapp]").forEach(btn => {
@@ -1837,8 +2024,17 @@ function renderizarModal(){
   const semEstoque = produto.estoque === 0;
   const estoqueBaixo = produto.estoque > 0 && produto.estoque <= 5;
 
+  const favoritado = favoritos.has(produto.id);
+  const temDesconto = produto.precoDe && produto.precoDe > produto.preco;
+  const percentualDesconto = temDesconto ? Math.round((1 - produto.preco / produto.precoDe) * 100) : 0;
+
   modalGaleria.innerHTML = `
     ${tagImagem(imagens[indiceGaleriaAtual] === IMAGEM_FALLBACK ? "" : imagens[indiceGaleriaAtual], produto.nome)}
+    <div class="card-badges-topo">
+      ${produto.selo ? `<span class="selo">${produto.selo}</span>` : ""}
+      ${semEstoque ? '<span class="badge">Esgotado</span>' : estoqueBaixo ? '<span class="badge">Últimas unidades</span>' : ""}
+    </div>
+    <button class="favorito-btn ${favoritado ? "ativo" : ""}" id="modalFavorito" title="${favoritado ? "Remover dos favoritos" : "Salvar nos favoritos"}">${favoritado ? "❤️" : "🤍"}</button>
     ${imagens.length > 1 ? `
       <button class="modal-galeria-nav prev" id="modalPrev" aria-label="Foto anterior">‹</button>
       <button class="modal-galeria-nav next" id="modalNext" aria-label="Próxima foto">›</button>
@@ -1853,7 +2049,13 @@ function renderizarModal(){
       <div class="modal-marca">${produto.marca}</div>
       <div class="modal-nome">${produto.nome}</div>
     </div>
-    <div class="modal-preco"><small>R$</small>${formatarPreco(produto.preco)}</div>
+    <div class="modal-preco-bloco">
+      ${temDesconto ? `<div class="modal-preco-antigo">R$ ${formatarPreco(produto.precoDe)}</div>` : ""}
+      <div class="modal-preco">
+        <small>R$</small>${formatarPreco(produto.preco)}
+        ${temDesconto ? `<span class="desconto-tag">-${percentualDesconto}%</span>` : ""}
+      </div>
+    </div>
     <p class="modal-desc">${produto.descricao}</p>
     <p class="modal-status">${semEstoque ? "Produto esgotado no momento." : estoqueBaixo ? `Últimas unidades (restam ${produto.estoque}).` : "Disponível em estoque."}</p>
     <div class="modal-actions">
@@ -1861,6 +2063,13 @@ function renderizarModal(){
       <button class="btn btn-primary" id="modalAdd" ${semEstoque ? "disabled" : ""}>Adicionar ao carrinho</button>
     </div>
   `;
+
+  document.getElementById("modalFavorito").addEventListener("click", (ev) => {
+    ev.stopPropagation();
+    alternarFavorito(produto.id);
+    renderizarModal();
+    renderizarCatalogo();
+  });
 
   if (imagens.length > 1){
     document.getElementById("modalPrev").addEventListener("click", () => navegarGaleria(-1));
