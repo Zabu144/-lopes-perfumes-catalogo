@@ -1480,6 +1480,31 @@ async function carregarProdutos(){
 
     const resultado = Papa.parse(textoCsv, { header: true, skipEmptyLines: true });
 
+    // Converte valores de preço vindos da planilha em número, não importa o
+    // formato: "449,90", "R$ 449,90", "1.234,56" ou "449.90" — tudo funciona.
+    // Isso é necessário porque, quando a coluna está formatada como moeda no
+    // Google Sheets, o CSV exportado vem com o símbolo "R$" junto do número.
+    function paraNumero(valor){
+      if (valor === null || valor === undefined) return null;
+      let texto = String(valor).trim();
+      if (texto === "") return null;
+
+      // Remove tudo que não for dígito, vírgula, ponto ou sinal de menos
+      texto = texto.replace(/[^\d,.-]/g, "");
+      if (texto === "") return null;
+
+      if (texto.includes(",") && texto.includes(".")){
+        // "1.234,56" -> ponto é separador de milhar, vírgula é decimal
+        texto = texto.replace(/\./g, "").replace(",", ".");
+      } else if (texto.includes(",")){
+        // "449,90" -> vírgula é decimal
+        texto = texto.replace(",", ".");
+      }
+
+      const numero = parseFloat(texto);
+      return isNaN(numero) ? null : numero;
+    }
+
     const produtosDaPlanilha = resultado.data
       .filter(linha => linha.nome && linha.nome.trim())
       .map(linha => {
@@ -1496,10 +1521,8 @@ async function carregarProdutos(){
           id: Number(linha.id),
           nome: linha.nome.trim(),
           marca: (linha.marca || "").trim(),
-          preco: parseFloat(String(linha.preco).replace(",", ".")) || 0,
-          precoDe: linha.preco_de && String(linha.preco_de).trim() !== ""
-            ? (parseFloat(String(linha.preco_de).replace(",", ".")) || null)
-            : null,
+          preco: paraNumero(linha.preco) || 0,
+          precoDe: paraNumero(linha.preco_de),
           selo: (linha.selo || "").trim(),
           descricao: (linha.descricao || "").trim(),
           estoque: parseInt(linha.estoque, 10) || 0,
